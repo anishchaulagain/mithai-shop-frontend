@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/lib/types';
 import { Check, X } from 'lucide-react';
+import AddToCartButton from './AddToCartButton';
 
 interface ProductCardProps {
   product: Product;
@@ -71,9 +72,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 /{product.unit.replace('per ', '')}
               </span>
             </div>
-            <button className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:from-orange-600 hover:to-amber-600 transition-all">
-              View Details
-            </button>
+            <div className="flex items-center gap-2">
+              <AddToCartButton 
+                product={product} 
+                quantity={product.minQuantity}
+                className="bg-orange-100 text-orange-600 px-3 py-2 rounded-full hover:bg-orange-200"
+                showIcon={true} 
+              />
+            </div>
           </div>
         </div>
       </div>

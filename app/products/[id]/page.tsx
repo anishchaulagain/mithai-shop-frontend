@@ -7,6 +7,7 @@ import { Product } from '@/lib/types';
 import { getProduct } from '@/lib/api';
 import QuantitySelector from '@/components/QuantitySelector';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import AddToCartButton from '@/components/AddToCartButton';
 import { ArrowLeft, Check, X, Tag, Package } from 'lucide-react';
 
 interface ProductDetailPageProps {
@@ -194,8 +195,17 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             </p>
           </div>
 
-          {/* WhatsApp Button */}
-          <WhatsAppButton product={product} quantity={quantity} />
+          
+          <div className="flex gap-4">
+            <AddToCartButton 
+              product={product} 
+              quantity={quantity}
+              className="flex-1 bg-orange-100 text-orange-700 py-4 px-6 rounded-full font-semibold text-lg hover:bg-orange-200 shadow-sm"
+            />
+            <div className="flex-1">
+              <WhatsAppButton product={product} quantity={quantity} />
+            </div>
+          </div>
 
           {/* Additional Info */}
           <p className="text-center text-sm text-gray-500">

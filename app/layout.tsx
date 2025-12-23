@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
+import { CartProvider } from "@/lib/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -12,9 +13,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Mithai Shop - Authentic Indian Sweets",
-  description: "Discover exquisite handcrafted Indian sweets made with love and traditional recipes. Laddu, Jalebi, Gulab Jamun, and more!",
-  keywords: ["Indian sweets", "mithai", "laddu", "jalebi", "gulab jamun", "traditional sweets"],
+  title: "Mithai Shop - Authentic Nepali Sweets",
+  description: "Discover exquisite handcrafted Nepali sweets made with love and traditional recipes. Laddu, Jalebi, Gulab Jamun, and more!",
+  keywords: ["Nepali sweets", "mithai", "laddu", "jalebi", "gulab jamun", "traditional sweets"],
 };
 
 export default function RootLayout({
@@ -26,11 +27,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} font-sans antialiased bg-amber-50/30`}>
         <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
+          <CartProvider>
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

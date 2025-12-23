@@ -11,11 +11,25 @@ import { ArrowRight, Star, Truck, Shield, Clock } from 'lucide-react';
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const categories = [
+    { name: 'All', emoji: '🏪' },
+    { name: 'Traditional', emoji: '🍬' },
+    { name: 'Dry Sweets', emoji: '🥜' },
+    { name: 'Milk-Based', emoji: '🥛' },
+    { name: 'Special', emoji: '✨' },
+  ];
 
   useEffect(() => {
     const fetchFeatured = async () => {
+      setLoading(true);
       try {
-        const products = await getProducts({ available: 'true' });
+        const params: any = { available: 'true' };
+        if (selectedCategory !== 'All') {
+          params.category = selectedCategory;
+        }
+        const products = await getProducts(params);
         setFeaturedProducts(products.slice(0, 4));
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -24,84 +38,50 @@ export default function Home() {
       }
     };
     fetchFeatured();
-  }, []);
-
-  const categories = [
-    { name: 'Traditional', emoji: '🍬', description: 'Classic favorites' },
-    { name: 'Dry Sweets', emoji: '🥜', description: 'Nutty delights' },
-    { name: 'Milk-Based', emoji: '🥛', description: 'Creamy treats' },
-    { name: 'Special', emoji: '✨', description: 'Premium selection' },
-  ];
-
-  const features = [
-    { icon: Star, title: 'Premium Quality', description: 'Made with finest ingredients' },
-    { icon: Truck, title: 'Fresh Delivery', description: 'Delivered fresh to you' },
-    { icon: Shield, title: 'Pure & Authentic', description: '100% traditional recipes' },
-    { icon: Clock, title: 'Made Fresh', description: 'Prepared fresh daily' },
-  ];
+  }, [selectedCategory]);
 
   return (
     <div>
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Features Section */}
+      {/* Featured Products Section with Category Filter */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100">
-                <div className="w-14 h-14 mx-auto bg-gradient-to-br from-orange-500 to-amber-500 rounded-full flex items-center justify-center mb-4">
-                  <feature.icon className="h-7 w-7 text-white" />
-                </div>
-                <h3 className="font-semibold text-amber-900">{feature.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-16 bg-gradient-to-br from-amber-50 to-orange-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-amber-900">Browse by Category</h2>
-            <p className="text-gray-600 mt-2">Find your favorite sweets</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                href={`/products?category=${category.name}`}
-                className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all text-center hover:-translate-y-1"
-              >
-                <span className="text-5xl block mb-4 group-hover:scale-110 transition-transform">
-                  {category.emoji}
-                </span>
-                <h3 className="font-semibold text-amber-900 group-hover:text-orange-600 transition-colors">
+            <h2 className="text-3xl font-bold text-amber-900">Our Collection</h2>
+            <p className="text-gray-600 mt-2 mb-8">Filter by category to find your perfect sweet</p>
+            
+            {/* Category Badges */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              {categories.map((category) => (
+                <button
+                  key={category.name}
+                  onClick={() => setSelectedCategory(category.name)}
+                  className={`
+                    inline-flex items-center gap-2 px-6 py-2 rounded-full text-sm font-semibold transition-all
+                    ${selectedCategory === category.name 
+                      ? 'bg-orange-600 text-white shadow-lg scale-105' 
+                      : 'bg-orange-50 text-orange-900 hover:bg-orange-100'
+                    }
+                  `}
+                >
+                  <span className="text-lg">{category.emoji}</span>
                   {category.name}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">{category.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl font-bold text-amber-900">Featured Sweets</h2>
-              <p className="text-gray-600 mt-2">Our most loved delicacies</p>
+                </button>
+              ))}
             </div>
+          </div>
+
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-bold text-amber-900">
+              {selectedCategory === 'All' ? 'Featured Sweets' : `${selectedCategory} Sweets`}
+            </h3>
             <Link
               href="/products"
               className="hidden md:flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium transition-colors"
             >
-              View All Products
+              View Full Menu
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
@@ -114,18 +94,24 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+              {featuredProducts.length > 0 ? (
+                featuredProducts.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No products found in this category.
+                </div>
+              )}
             </div>
           )}
 
-          <div className="mt-8 text-center md:hidden">
+          <div className="mt-12 text-center md:hidden">
             <Link
               href="/products"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-full font-semibold"
             >
-              View All Products
+              View Full Menu
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>

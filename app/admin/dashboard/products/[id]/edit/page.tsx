@@ -254,13 +254,32 @@ export default function EditProductPage({ params }: EditProductPageProps) {
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Product Image
             </label>
+
+            {/* Image URL Input */}
+            <div className="mb-4">
+              <label className="block text-xs text-gray-500 mb-1">
+                Image URL (optional)
+              </label>
+              <input
+                type="text"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+              />
+            </div>
+
             <div className="flex items-start gap-4">
               {imagePreview || formData.image ? (
-                <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-gray-200">
+                <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
                   <img
                     src={imagePreview || (formData.image.startsWith('http') ? formData.image : `${API_BASE}${formData.image}`)}
                     alt="Preview"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/400?text=Invalid+Image';
+                    }}
                   />
                   <button
                     type="button"
@@ -268,15 +287,15 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                       setImagePreview('');
                       setFormData((prev) => ({ ...prev, image: '' }));
                     }}
-                    className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full"
+                    className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
               ) : (
-                <label className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 transition-colors">
+                <label className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 transition-colors bg-gray-50 hover:bg-gray-100">
                   <Upload className="h-8 w-8 text-gray-400" />
-                  <span className="text-sm text-gray-500 mt-1">Upload</span>
+                  <span className="text-sm text-gray-500 mt-1">Upload File</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -286,7 +305,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                 </label>
               )}
               {uploading && (
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-gray-500 self-center">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500" />
                   <span>Uploading...</span>
                 </div>

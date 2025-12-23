@@ -16,7 +16,7 @@ export default function HeroSection() {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Sparkles className="h-4 w-4" />
-              <span>Authentic Indian Sweets</span>
+              <span>Authentic Nepali Sweets</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-amber-900 leading-tight">
@@ -27,7 +27,7 @@ export default function HeroSection() {
             </h1>
             
             <p className="mt-6 text-lg text-amber-800/80 max-w-xl mx-auto lg:mx-0">
-              Discover our exquisite collection of handcrafted Indian sweets. 
+              Discover our exquisite collection of handcrafted Nepali sweets. 
               Made with love, premium ingredients, and recipes passed down through generations.
             </p>
 
